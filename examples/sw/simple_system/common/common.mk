@@ -7,8 +7,8 @@ COMMON_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 COMMON_SRCS = $(wildcard $(COMMON_DIR)/*.c)
 INCS := -I$(COMMON_DIR)
 
-# ARCH = rv32im # to disable compressed instructions
-ARCH ?= rv32imc
+ARCH = rv32imzicsr # to disable compressed instructions
+# ARCH ?= rv32imc
 
 ifdef PROGRAM
 PROGRAM_C := $(PROGRAM).c
@@ -19,7 +19,7 @@ SRCS = $(COMMON_SRCS) $(PROGRAM_C) $(EXTRA_SRCS)
 C_SRCS = $(filter %.c, $(SRCS))
 ASM_SRCS = $(filter %.S, $(SRCS))
 
-CC = riscv32-unknown-elf-gcc
+CC = riscv64-unknown-elf-gcc
 
 CROSS_COMPILE = $(patsubst %-gcc,%-,$(CC))
 OBJCOPY ?= $(CROSS_COMPILE)objcopy

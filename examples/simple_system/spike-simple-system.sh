@@ -80,12 +80,12 @@ fi
 # Time to figure out how to call the Spike binary. If the user has set
 # SPIKE_PATH, we should obey that. Otherwise, we'll just assume that
 # they've got their PATH set up sensibly.
-if [ x"$SPIKE_PATH" = x ]; then
-    spike='spike'
-else
-    spike="$SPIKE_PATH/spike"
-fi
-
+# if [ x"$SPIKE_PATH" = x ]; then
+#     spike='spike'
+# else
+#     spike="$SPIKE_PATH/spike"
+# fi
+spike='spike'
 # Here are the Spike options you need to run in a simple_system world.
 declare -a ss_opts
 ss_opts=("--isa=rv32imc"
