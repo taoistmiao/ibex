@@ -129,7 +129,7 @@ module ibex_tracer (
       rvfi_insn_str = $sformatf("%h", rvfi_insn);
     end
 
-    $fwrite(file_handle, "%15t\t%d\t%h\t%s\t%s\t",
+    $fwrite(file_handle, "%15t\t%d\t0x%h\t0x%s\t%s\t",
             $time, cycle, rvfi_pc_rdata, rvfi_insn_str, decoded_str);
 
     if ((data_accessed & RS1) != 0) begin

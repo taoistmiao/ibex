@@ -302,5 +302,29 @@ module ibex_top_tracing import ibex_pkg::*; #(
     .rvfi_mem_rdata,
     .rvfi_mem_wdata
   );
+  import "DPI-C" function string entry_parser(input string str);
+  int spike_log_fd;
+  int cmp_log_fd;
+  string entry;
+  string parsed_entry;
+  initial begin
+    spike_log_fd = $fopen("../dv/hello.json", "r");
+    cmp_log_fd = $fopen("../dv/cmp.txt", "w");
+
+    $fgets(entry, spike_log_fd);
+    $fgets(entry, spike_log_fd);
+    $fwrite(cmp_log_fd, "first entry: %s\n", entry);
+
+    parsed_entry = entry_parser(entry);
+    $fwrite(cmp_log_fd, "parsed entry: %s\n", parsed_entry);
+
+    $fclose(spike_log_fd);
+    $fclose(cmp_log_fd);
+  end
+  // always @(posedge clk_i) begin
+  //   if (rvfi_valid) {
+
+  //   }
+  // end
 
 endmodule
