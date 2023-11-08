@@ -10,7 +10,6 @@ filesets:
       - lowrisc:ibex:ibex_simple_system_core
     files:
       - tool_verilator ? (ibex_simple_system_main.cc)
-      - tool_verilator ? (jsonc_test.c)
     file_type: cppSource
 
 parameters:

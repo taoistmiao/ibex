@@ -7,6 +7,7 @@
 #include <iostream>
 
 #include "Vibex_simple_system__Syms.h"
+#include "Vibex_simple_system__Dpi.h"
 #include "ibex_pcounts.h"
 #include "ibex_simple_system.h"
 #include "verilated_toplevel.h"

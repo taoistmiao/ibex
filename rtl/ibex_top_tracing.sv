@@ -302,11 +302,15 @@ module ibex_top_tracing import ibex_pkg::*; #(
     .rvfi_mem_rdata,
     .rvfi_mem_wdata
   );
-  import "DPI-C" function string entry_parser(input string str);
+  
+  import "DPI-C" function string entry_parser(input string entry, input chandle value);
+  import "DPI-C" function chandle new_chandle();
+  import "DPI-C" function void free_chandle(input chandle str);
   int spike_log_fd;
   int cmp_log_fd;
   string entry;
   string parsed_entry;
+  chandle tmp_storage = new_chandle();
   initial begin
     spike_log_fd = $fopen("../dv/hello.json", "r");
     cmp_log_fd = $fopen("../dv/cmp.txt", "w");
@@ -315,9 +319,10 @@ module ibex_top_tracing import ibex_pkg::*; #(
     $fgets(entry, spike_log_fd);
     $fwrite(cmp_log_fd, "first entry: %s\n", entry);
 
-    parsed_entry = entry_parser(entry);
+    parsed_entry = entry_parser(entry, tmp_storage);
     $fwrite(cmp_log_fd, "parsed entry: %s\n", parsed_entry);
-
+    free_chandle(tmp_storage);
+    
     $fclose(spike_log_fd);
     $fclose(cmp_log_fd);
   end
