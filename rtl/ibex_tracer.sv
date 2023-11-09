@@ -783,15 +783,16 @@ module ibex_tracer (
       sb_pc = get_pc(entry, tmp_storage);
       sb_addr = get_addr(entry, tmp_storage);
       sb_data = get_data(entry, tmp_storage);
-      if (($sformatf("x%0d", rvfi_rd_addr) == sb_addr) && (rvfi_rd_wdata == sb_data.atohex()))
+      if ((sb_addr == "pc") && (rvfi_pc_rdata == sb_pc.atohex())) begin
+        $fwrite(sb_log_fd, "pc: 0x%s: pass\n", sb_pc);
+      end else if ((rvfi_pc_rdata == sb_pc.atohex()) && ($sformatf("x%0d", rvfi_rd_addr) == sb_addr) && (rvfi_rd_wdata == sb_data.atohex()))
         $fwrite(sb_log_fd, "pc: 0x%s: pass\n", sb_pc);
       else begin   
         $fwrite(sb_log_fd, "pc: %08x: fail\n", rvfi_pc_rdata);
         $fwrite(sb_log_fd, "sb_addr: %s; rvfi_rd_addr: %s\n", sb_addr, $sformatf("x%0d", rvfi_rd_addr));
         $fwrite(sb_log_fd, "sb_data: %s(%x); rvfi_rd_wdata: %x\n", sb_data, sb_data.atohex(), rvfi_rd_wdata);
       end
-    end
-    if ((data_accessed & MEM) != 0) begin
+    end else if ((data_accessed & MEM) != 0) begin
       if (rvfi_mem_wmask != 4'b0000) begin
         sb_pc = get_pc(entry, tmp_storage);
         sb_addr = get_addr(entry, tmp_storage);
@@ -799,6 +800,10 @@ module ibex_tracer (
         if ((rvfi_mem_addr == sb_addr.atohex()) && (rvfi_mem_wdata == sb_data.atohex()))
           $fwrite(sb_log_fd, "pc: 0x%s: pass\n", sb_pc);
         else   $fwrite(sb_log_fd, "pc: %08x: fail\n", rvfi_pc_rdata);
+      end
+    end else begin
+      if ((sb_addr == "pc") && (rvfi_pc_rdata == sb_pc.atohex())) begin
+        $fwrite(sb_log_fd, "pc: 0x%s: pass\n", sb_pc);
       end
     end
   endfunction
