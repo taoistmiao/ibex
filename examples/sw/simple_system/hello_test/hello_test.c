@@ -5,9 +5,9 @@
 #include "simple_system_common.h"
 
 int main(int argc, char **argv) {
-  pcount_enable(0);
-  pcount_reset();
-  pcount_enable(1);
+  // pcount_enable(0);
+  // pcount_reset();
+  // pcount_enable(1);
 
   puts("Hello simple system\n");
   puthex(0xDEADBEEF);
@@ -15,7 +15,7 @@ int main(int argc, char **argv) {
   puthex(0xBAADF00D);
   putchar('\n');
 
-  pcount_enable(0);
+  // pcount_enable(0);
 
   // Enable periodic timer interrupt
   // (the actual timebase is a bit meaningless in simulation)

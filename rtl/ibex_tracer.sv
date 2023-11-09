@@ -67,6 +67,13 @@ module ibex_tracer (
   input logic [31:0] rvfi_mem_rdata,
   input logic [31:0] rvfi_mem_wdata
 );
+  import "DPI-C" function string get_pc(input string entry, input chandle tmp_storage);
+  import "DPI-C" function string get_inst(input string entry, input chandle tmp_storage);
+  import "DPI-C" function string get_target(input string entry, input chandle tmp_storage);
+  import "DPI-C" function string get_addr(input string entry, input chandle tmp_storage);
+  import "DPI-C" function string get_data(input string entry, input chandle tmp_storage);
+  import "DPI-C" function chandle new_chandle();
+  import "DPI-C" function void free_chandle(input chandle str);
 
   // These signals are part of RVFI, but not used in this module currently.
   // Keep them as part of the interface to change the tracer more easily in the future. Assigning
@@ -751,12 +758,61 @@ module ibex_tracer (
     end
   end
 
+  int spike_log_fd;
+  int sb_log_fd;
+  chandle tmp_storage = new_chandle();
+  string entry;
+  // string sb_inst, sb_target;
+  string sb_pc, sb_addr, sb_data;
+
+  initial begin
+    spike_log_fd = $fopen("../dv/hello.json", "r");
+    $fgets(entry, spike_log_fd);
+    sb_log_fd = $fopen("../dv/sb.log", "w");
+  end
+
+  final begin
+    $fclose(spike_log_fd);
+    $fclose(sb_log_fd);
+    free_chandle(tmp_storage);
+  end
+/* verilator lint_off BLKSEQ */
+  function automatic void arch_state_sb();
+    $fgets(entry, spike_log_fd);
+    if ((data_accessed & RD) != 0) begin
+      sb_pc = get_pc(entry, tmp_storage);
+      sb_addr = get_addr(entry, tmp_storage);
+      sb_data = get_data(entry, tmp_storage);
+      if (($sformatf("x%0d", rvfi_rd_addr) == sb_addr) && (rvfi_rd_wdata == sb_data.atohex()))
+        $fwrite(sb_log_fd, "pc: 0x%s: pass\n", sb_pc);
+      else begin   
+        $fwrite(sb_log_fd, "pc: %08x: fail\n", rvfi_pc_rdata);
+        $fwrite(sb_log_fd, "sb_addr: %s; rvfi_rd_addr: %s\n", sb_addr, $sformatf("x%0d", rvfi_rd_addr));
+        $fwrite(sb_log_fd, "sb_data: %s(%x); rvfi_rd_wdata: %x\n", sb_data, sb_data.atohex(), rvfi_rd_wdata);
+      end
+    end
+    if ((data_accessed & MEM) != 0) begin
+      if (rvfi_mem_wmask != 4'b0000) begin
+        sb_pc = get_pc(entry, tmp_storage);
+        sb_addr = get_addr(entry, tmp_storage);
+        sb_data = get_data(entry, tmp_storage);
+        if ((rvfi_mem_addr == sb_addr.atohex()) && (rvfi_mem_wdata == sb_data.atohex()))
+          $fwrite(sb_log_fd, "pc: 0x%s: pass\n", sb_pc);
+        else   $fwrite(sb_log_fd, "pc: %08x: fail\n", rvfi_pc_rdata);
+      end
+    end
+  endfunction
+  /* verilator lint_on BLKSEQ */
+
   // log execution
+  /* verilator lint_off BLKSEQ */
   always_ff @(posedge clk_i) begin
     if (rvfi_valid && trace_log_enable) begin
       printbuffer_dumpline();
+      arch_state_sb();
     end
   end
+  /* verilator lint_on BLKSEQ */
 
   always_comb begin
     decoded_str = "";

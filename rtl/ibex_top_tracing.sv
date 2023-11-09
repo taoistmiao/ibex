@@ -303,33 +303,41 @@ module ibex_top_tracing import ibex_pkg::*; #(
     .rvfi_mem_wdata
   );
   
-  import "DPI-C" function string entry_parser(input string entry, input chandle value);
-  import "DPI-C" function chandle new_chandle();
-  import "DPI-C" function void free_chandle(input chandle str);
-  int spike_log_fd;
-  int cmp_log_fd;
-  string entry;
-  string parsed_entry;
-  chandle tmp_storage = new_chandle();
-  initial begin
-    spike_log_fd = $fopen("../dv/hello.json", "r");
-    cmp_log_fd = $fopen("../dv/cmp.txt", "w");
+  // import "DPI-C" function string get_pc(input string entry, input chandle tmp_storage);
+  // import "DPI-C" function string get_inst(input string entry, input chandle tmp_storage);
+  // import "DPI-C" function string get_target(input string entry, input chandle tmp_storage);
+  // import "DPI-C" function string get_addr(input string entry, input chandle tmp_storage);
+  // import "DPI-C" function string get_data(input string entry, input chandle tmp_storage);
+  // import "DPI-C" function chandle new_chandle();
+  // import "DPI-C" function void free_chandle(input chandle str);
+  // int spike_log_fd;
+  // int cmp_log_fd;
+  // string entry;
+  // string parsed_entry;
+  // string pc, inst, target, addr, data;
+  // chandle tmp_storage = new_chandle();
 
-    $fgets(entry, spike_log_fd);
-    $fgets(entry, spike_log_fd);
-    $fwrite(cmp_log_fd, "first entry: %s\n", entry);
+  // initial begin
+  //   spike_log_fd = $fopen("../dv/hello.json", "r");
+  //   cmp_log_fd = $fopen("../dv/cmp.log", "w");
 
-    parsed_entry = entry_parser(entry, tmp_storage);
-    $fwrite(cmp_log_fd, "parsed entry: %s\n", parsed_entry);
-    free_chandle(tmp_storage);
+  //   $fgets(entry, spike_log_fd);
+  //   while (rvfi_mem_addr != 'h20008) begin
+  //     @(posedge clk_i);
+  //     if (rvfi_valid) begin
+  //       $fgets(entry, spike_log_fd);
+  //       pc = get_pc(entry, tmp_storage);
+  //       assert () 
+  //       else   error_process
+  //       $fwrite(cmp_log_fd, "pc: %s; ", pc);   
+  //     end
+  //   end
+  //   parsed_entry = entry_parser(entry, tmp_storage);
     
-    $fclose(spike_log_fd);
-    $fclose(cmp_log_fd);
-  end
-  // always @(posedge clk_i) begin
-  //   if (rvfi_valid) {
-
-  //   }
+  //   free_chandle(tmp_storage);
+    
+  //   $fclose(spike_log_fd);
+  //   $fclose(cmp_log_fd);
   // end
 
 endmodule
