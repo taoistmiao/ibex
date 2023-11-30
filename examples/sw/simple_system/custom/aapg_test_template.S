@@ -295,16 +295,16 @@ ecall
 .macro test_entry_macro
 .endm
 .macro pre_program_macro
-
+add x0,x0,x0
  .endm
 .macro post_program_macro
-
+ret
  .endm
 .macro pre_branch_macro
-
+add x0,x0,x0
  .endm
 .macro post_branch_macro
-
+add x0,x0,x0
  .endm
 .macro test_pass_macro
 la      sp, begin_signature; addi    sp, sp, 2*REGBYTES; li      t1, 0xfffff; SREG    t1, 0*REGBYTES(sp)

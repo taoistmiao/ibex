@@ -766,7 +766,7 @@ module ibex_tracer (
   string sb_pc, sb_addr, sb_data;
 
   initial begin
-    spike_log_fd = $fopen("../dv/hello.json", "r");
+    spike_log_fd = $fopen("../dv/aapg_test.json", "r");
     $fgets(entry, spike_log_fd);
     sb_log_fd = $fopen("../dv/sb.log", "w");
   end
@@ -797,7 +797,7 @@ module ibex_tracer (
         sb_pc = get_pc(entry, tmp_storage);
         sb_addr = get_addr(entry, tmp_storage);
         sb_data = get_data(entry, tmp_storage);
-        if ((rvfi_mem_addr == sb_addr.atohex()) && (rvfi_mem_wdata == sb_data.atohex()))
+        if ((rvfi_mem_addr == sb_addr.atohex()) && ((rvfi_mem_wdata & {{8{rvfi_mem_wmask[3]}},{8{rvfi_mem_wmask[2]}},{8{rvfi_mem_wmask[1]}},{8{rvfi_mem_wmask[0]}}}) == sb_data.atohex()))
           $fwrite(sb_log_fd, "pc: 0x%s: pass\n", sb_pc);
         else   $fwrite(sb_log_fd, "pc: %08x: fail\n", rvfi_pc_rdata);
       end

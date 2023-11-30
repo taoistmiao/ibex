@@ -1,0 +1,396 @@
+
+/home/guotong/4OJ4-2023/ibex/examples/sw/simple_system/hello_test/hello_test.elf:     file format elf32-littleriscv
+
+
+Disassembly of section .vectors:
+
+00100000 <_vectors_start>:
+  100000:	4340006f          	j	100434 <default_exc_handler>
+  100004:	4300006f          	j	100434 <default_exc_handler>
+  100008:	42c0006f          	j	100434 <default_exc_handler>
+  10000c:	4280006f          	j	100434 <default_exc_handler>
+  100010:	4240006f          	j	100434 <default_exc_handler>
+  100014:	4200006f          	j	100434 <default_exc_handler>
+  100018:	41c0006f          	j	100434 <default_exc_handler>
+  10001c:	41c0006f          	j	100438 <timer_handler>
+  100020:	4140006f          	j	100434 <default_exc_handler>
+  100024:	4100006f          	j	100434 <default_exc_handler>
+  100028:	40c0006f          	j	100434 <default_exc_handler>
+  10002c:	4080006f          	j	100434 <default_exc_handler>
+  100030:	4040006f          	j	100434 <default_exc_handler>
+  100034:	4000006f          	j	100434 <default_exc_handler>
+  100038:	3fc0006f          	j	100434 <default_exc_handler>
+  10003c:	3f80006f          	j	100434 <default_exc_handler>
+  100040:	3f40006f          	j	100434 <default_exc_handler>
+  100044:	3f00006f          	j	100434 <default_exc_handler>
+  100048:	3ec0006f          	j	100434 <default_exc_handler>
+  10004c:	3e80006f          	j	100434 <default_exc_handler>
+  100050:	3e40006f          	j	100434 <default_exc_handler>
+  100054:	3e00006f          	j	100434 <default_exc_handler>
+  100058:	3dc0006f          	j	100434 <default_exc_handler>
+  10005c:	3d80006f          	j	100434 <default_exc_handler>
+  100060:	3d40006f          	j	100434 <default_exc_handler>
+  100064:	3d00006f          	j	100434 <default_exc_handler>
+  100068:	3cc0006f          	j	100434 <default_exc_handler>
+  10006c:	3c80006f          	j	100434 <default_exc_handler>
+  100070:	3c40006f          	j	100434 <default_exc_handler>
+  100074:	3c00006f          	j	100434 <default_exc_handler>
+  100078:	3bc0006f          	j	100434 <default_exc_handler>
+  10007c:	0000                	.2byte	0x0
+  10007e:	0000                	.2byte	0x0
+  100080:	3bc0006f          	j	10043c <reset_handler>
+
+Disassembly of section .text:
+
+00100084 <putchar>:
+  100084:	0ff57793          	zext.b	a5,a0
+  100088:	00020737          	lui	a4,0x20
+  10008c:	00f72023          	sw	a5,0(a4) # 20000 <_stack_len+0x18000>
+  100090:	00008067          	ret
+
+00100094 <puts>:
+  100094:	00020737          	lui	a4,0x20
+  100098:	00054783          	lbu	a5,0(a0)
+  10009c:	00079663          	bnez	a5,1000a8 <puts+0x14>
+  1000a0:	00000513          	li	a0,0
+  1000a4:	00008067          	ret
+  1000a8:	00150513          	add	a0,a0,1
+  1000ac:	00f72023          	sw	a5,0(a4) # 20000 <_stack_len+0x18000>
+  1000b0:	fe9ff06f          	j	100098 <puts+0x4>
+
+001000b4 <puthex>:
+  1000b4:	00800713          	li	a4,8
+  1000b8:	00900613          	li	a2,9
+  1000bc:	000206b7          	lui	a3,0x20
+  1000c0:	01c55793          	srl	a5,a0,0x1c
+  1000c4:	00f66e63          	bltu	a2,a5,1000e0 <puthex+0x2c>
+  1000c8:	03078793          	add	a5,a5,48
+  1000cc:	00f6a023          	sw	a5,0(a3) # 20000 <_stack_len+0x18000>
+  1000d0:	fff70713          	add	a4,a4,-1
+  1000d4:	00451513          	sll	a0,a0,0x4
+  1000d8:	fe0714e3          	bnez	a4,1000c0 <puthex+0xc>
+  1000dc:	00008067          	ret
+  1000e0:	03778793          	add	a5,a5,55
+  1000e4:	fe9ff06f          	j	1000cc <puthex+0x18>
+
+001000e8 <sim_halt>:
+  1000e8:	000207b7          	lui	a5,0x20
+  1000ec:	00100713          	li	a4,1
+  1000f0:	00e7a423          	sw	a4,8(a5) # 20008 <tohost>
+  1000f4:	00008067          	ret
+
+001000f8 <pcount_reset>:
+  1000f8:	b0201073          	csrw	minstret,zero
+  1000fc:	b0001073          	csrw	mcycle,zero
+  100100:	b0301073          	csrw	mhpmcounter3,zero
+  100104:	b0401073          	csrw	mhpmcounter4,zero
+  100108:	b0501073          	csrw	mhpmcounter5,zero
+  10010c:	b0601073          	csrw	mhpmcounter6,zero
+  100110:	b0701073          	csrw	mhpmcounter7,zero
+  100114:	b0801073          	csrw	mhpmcounter8,zero
+  100118:	b0901073          	csrw	mhpmcounter9,zero
+  10011c:	b0a01073          	csrw	mhpmcounter10,zero
+  100120:	b0b01073          	csrw	mhpmcounter11,zero
+  100124:	b0c01073          	csrw	mhpmcounter12,zero
+  100128:	b0d01073          	csrw	mhpmcounter13,zero
+  10012c:	b0e01073          	csrw	mhpmcounter14,zero
+  100130:	b0f01073          	csrw	mhpmcounter15,zero
+  100134:	b1001073          	csrw	mhpmcounter16,zero
+  100138:	b1101073          	csrw	mhpmcounter17,zero
+  10013c:	b1201073          	csrw	mhpmcounter18,zero
+  100140:	b1301073          	csrw	mhpmcounter19,zero
+  100144:	b1401073          	csrw	mhpmcounter20,zero
+  100148:	b1501073          	csrw	mhpmcounter21,zero
+  10014c:	b1601073          	csrw	mhpmcounter22,zero
+  100150:	b1701073          	csrw	mhpmcounter23,zero
+  100154:	b1801073          	csrw	mhpmcounter24,zero
+  100158:	b1901073          	csrw	mhpmcounter25,zero
+  10015c:	b1a01073          	csrw	mhpmcounter26,zero
+  100160:	b1b01073          	csrw	mhpmcounter27,zero
+  100164:	b1c01073          	csrw	mhpmcounter28,zero
+  100168:	b1d01073          	csrw	mhpmcounter29,zero
+  10016c:	b1e01073          	csrw	mhpmcounter30,zero
+  100170:	b1f01073          	csrw	mhpmcounter31,zero
+  100174:	b8201073          	csrw	minstreth,zero
+  100178:	b8001073          	csrw	mcycleh,zero
+  10017c:	b8301073          	csrw	mhpmcounter3h,zero
+  100180:	b8401073          	csrw	mhpmcounter4h,zero
+  100184:	b8501073          	csrw	mhpmcounter5h,zero
+  100188:	b8601073          	csrw	mhpmcounter6h,zero
+  10018c:	b8701073          	csrw	mhpmcounter7h,zero
+  100190:	b8801073          	csrw	mhpmcounter8h,zero
+  100194:	b8901073          	csrw	mhpmcounter9h,zero
+  100198:	b8a01073          	csrw	mhpmcounter10h,zero
+  10019c:	b8b01073          	csrw	mhpmcounter11h,zero
+  1001a0:	b8c01073          	csrw	mhpmcounter12h,zero
+  1001a4:	b8d01073          	csrw	mhpmcounter13h,zero
+  1001a8:	b8e01073          	csrw	mhpmcounter14h,zero
+  1001ac:	b8f01073          	csrw	mhpmcounter15h,zero
+  1001b0:	b9001073          	csrw	mhpmcounter16h,zero
+  1001b4:	b9101073          	csrw	mhpmcounter17h,zero
+  1001b8:	b9201073          	csrw	mhpmcounter18h,zero
+  1001bc:	b9301073          	csrw	mhpmcounter19h,zero
+  1001c0:	b9401073          	csrw	mhpmcounter20h,zero
+  1001c4:	b9501073          	csrw	mhpmcounter21h,zero
+  1001c8:	b9601073          	csrw	mhpmcounter22h,zero
+  1001cc:	b9701073          	csrw	mhpmcounter23h,zero
+  1001d0:	b9801073          	csrw	mhpmcounter24h,zero
+  1001d4:	b9901073          	csrw	mhpmcounter25h,zero
+  1001d8:	b9a01073          	csrw	mhpmcounter26h,zero
+  1001dc:	b9b01073          	csrw	mhpmcounter27h,zero
+  1001e0:	b9c01073          	csrw	mhpmcounter28h,zero
+  1001e4:	b9d01073          	csrw	mhpmcounter29h,zero
+  1001e8:	b9e01073          	csrw	mhpmcounter30h,zero
+  1001ec:	b9f01073          	csrw	mhpmcounter31h,zero
+  1001f0:	00008067          	ret
+
+001001f4 <get_mepc>:
+  1001f4:	34102573          	csrr	a0,mepc
+  1001f8:	00008067          	ret
+
+001001fc <get_mcause>:
+  1001fc:	34202573          	csrr	a0,mcause
+  100200:	00008067          	ret
+
+00100204 <get_mtval>:
+  100204:	34302573          	csrr	a0,mtval
+  100208:	00008067          	ret
+
+0010020c <simple_exc_handler>:
+  10020c:	ff010113          	add	sp,sp,-16
+  100210:	00000517          	auipc	a0,0x0
+  100214:	34050513          	add	a0,a0,832 # 100550 <main+0x4c>
+  100218:	00112623          	sw	ra,12(sp)
+  10021c:	e79ff0ef          	jal	100094 <puts>
+  100220:	00000517          	auipc	a0,0x0
+  100224:	34050513          	add	a0,a0,832 # 100560 <main+0x5c>
+  100228:	e6dff0ef          	jal	100094 <puts>
+  10022c:	00000517          	auipc	a0,0x0
+  100230:	34450513          	add	a0,a0,836 # 100570 <main+0x6c>
+  100234:	e61ff0ef          	jal	100094 <puts>
+  100238:	34102573          	csrr	a0,mepc
+  10023c:	e79ff0ef          	jal	1000b4 <puthex>
+  100240:	00000517          	auipc	a0,0x0
+  100244:	33c50513          	add	a0,a0,828 # 10057c <main+0x78>
+  100248:	e4dff0ef          	jal	100094 <puts>
+  10024c:	34202573          	csrr	a0,mcause
+  100250:	e65ff0ef          	jal	1000b4 <puthex>
+  100254:	00000517          	auipc	a0,0x0
+  100258:	33450513          	add	a0,a0,820 # 100588 <main+0x84>
+  10025c:	e39ff0ef          	jal	100094 <puts>
+  100260:	34302573          	csrr	a0,mtval
+  100264:	e51ff0ef          	jal	1000b4 <puthex>
+  100268:	000207b7          	lui	a5,0x20
+  10026c:	00a00713          	li	a4,10
+  100270:	00e7a023          	sw	a4,0(a5) # 20000 <_stack_len+0x18000>
+  100274:	00100713          	li	a4,1
+  100278:	00e7a423          	sw	a4,8(a5)
+  10027c:	0000006f          	j	10027c <simple_exc_handler+0x70>
+
+00100280 <timer_disable>:
+  100280:	08000793          	li	a5,128
+  100284:	3047b073          	csrc	mie,a5
+  100288:	00008067          	ret
+
+0010028c <timer_read>:
+  10028c:	000307b7          	lui	a5,0x30
+  100290:	0047a703          	lw	a4,4(a5) # 30004 <tohost+0xfffc>
+  100294:	0007a503          	lw	a0,0(a5)
+  100298:	0047a583          	lw	a1,4(a5)
+  10029c:	fee59ae3          	bne	a1,a4,100290 <timer_read+0x4>
+  1002a0:	00008067          	ret
+
+001002a4 <timecmp_update>:
+  1002a4:	000307b7          	lui	a5,0x30
+  1002a8:	fff00713          	li	a4,-1
+  1002ac:	00e7a423          	sw	a4,8(a5) # 30008 <tohost+0x10000>
+  1002b0:	00b7a623          	sw	a1,12(a5)
+  1002b4:	00a7a423          	sw	a0,8(a5)
+  1002b8:	00008067          	ret
+
+001002bc <timer_enable>:
+  1002bc:	ff010113          	add	sp,sp,-16
+  1002c0:	00112623          	sw	ra,12(sp)
+  1002c4:	00812423          	sw	s0,8(sp)
+  1002c8:	00912223          	sw	s1,4(sp)
+  1002cc:	00000693          	li	a3,0
+  1002d0:	00000797          	auipc	a5,0x0
+  1002d4:	2e878793          	add	a5,a5,744 # 1005b8 <time_elapsed>
+  1002d8:	00d7a023          	sw	a3,0(a5)
+  1002dc:	00000713          	li	a4,0
+  1002e0:	00e7a223          	sw	a4,4(a5)
+  1002e4:	00000797          	auipc	a5,0x0
+  1002e8:	2cc78793          	add	a5,a5,716 # 1005b0 <time_increment>
+  1002ec:	00050413          	mv	s0,a0
+  1002f0:	00058493          	mv	s1,a1
+  1002f4:	00a7a023          	sw	a0,0(a5)
+  1002f8:	00b7a223          	sw	a1,4(a5)
+  1002fc:	f91ff0ef          	jal	10028c <timer_read>
+  100300:	00a40533          	add	a0,s0,a0
+  100304:	00853433          	sltu	s0,a0,s0
+  100308:	00b485b3          	add	a1,s1,a1
+  10030c:	00b405b3          	add	a1,s0,a1
+  100310:	f95ff0ef          	jal	1002a4 <timecmp_update>
+  100314:	08000793          	li	a5,128
+  100318:	3047a073          	csrs	mie,a5
+  10031c:	00800793          	li	a5,8
+  100320:	3007a073          	csrs	mstatus,a5
+  100324:	00c12083          	lw	ra,12(sp)
+  100328:	00812403          	lw	s0,8(sp)
+  10032c:	00412483          	lw	s1,4(sp)
+  100330:	01010113          	add	sp,sp,16
+  100334:	00008067          	ret
+
+00100338 <get_elapsed_time>:
+  100338:	00000797          	auipc	a5,0x0
+  10033c:	28078793          	add	a5,a5,640 # 1005b8 <time_elapsed>
+  100340:	0007a503          	lw	a0,0(a5)
+  100344:	0047a583          	lw	a1,4(a5)
+  100348:	00008067          	ret
+
+0010034c <simple_timer_handler>:
+  10034c:	fb010113          	add	sp,sp,-80
+  100350:	02f12023          	sw	a5,32(sp)
+  100354:	00000797          	auipc	a5,0x0
+  100358:	25c78793          	add	a5,a5,604 # 1005b0 <time_increment>
+  10035c:	02812e23          	sw	s0,60(sp)
+  100360:	0007a403          	lw	s0,0(a5)
+  100364:	02912c23          	sw	s1,56(sp)
+  100368:	0047a483          	lw	s1,4(a5)
+  10036c:	02c12623          	sw	a2,44(sp)
+  100370:	01012e23          	sw	a6,28(sp)
+  100374:	01112c23          	sw	a7,24(sp)
+  100378:	04112623          	sw	ra,76(sp)
+  10037c:	04512423          	sw	t0,72(sp)
+  100380:	04612223          	sw	t1,68(sp)
+  100384:	04712023          	sw	t2,64(sp)
+  100388:	02d12423          	sw	a3,40(sp)
+  10038c:	02e12223          	sw	a4,36(sp)
+  100390:	01c12a23          	sw	t3,20(sp)
+  100394:	01d12823          	sw	t4,16(sp)
+  100398:	01e12623          	sw	t5,12(sp)
+  10039c:	01f12423          	sw	t6,8(sp)
+  1003a0:	02a12a23          	sw	a0,52(sp)
+  1003a4:	02b12823          	sw	a1,48(sp)
+  1003a8:	ee5ff0ef          	jal	10028c <timer_read>
+  1003ac:	00a40533          	add	a0,s0,a0
+  1003b0:	00853433          	sltu	s0,a0,s0
+  1003b4:	00b485b3          	add	a1,s1,a1
+  1003b8:	00b405b3          	add	a1,s0,a1
+  1003bc:	ee9ff0ef          	jal	1002a4 <timecmp_update>
+  1003c0:	00000597          	auipc	a1,0x0
+  1003c4:	1f858593          	add	a1,a1,504 # 1005b8 <time_elapsed>
+  1003c8:	0005a803          	lw	a6,0(a1)
+  1003cc:	0045a883          	lw	a7,4(a1)
+  1003d0:	03c12403          	lw	s0,60(sp)
+  1003d4:	00180513          	add	a0,a6,1
+  1003d8:	01053633          	sltu	a2,a0,a6
+  1003dc:	011607b3          	add	a5,a2,a7
+  1003e0:	00a5a023          	sw	a0,0(a1)
+  1003e4:	00f5a223          	sw	a5,4(a1)
+  1003e8:	04c12083          	lw	ra,76(sp)
+  1003ec:	04812283          	lw	t0,72(sp)
+  1003f0:	04412303          	lw	t1,68(sp)
+  1003f4:	04012383          	lw	t2,64(sp)
+  1003f8:	03812483          	lw	s1,56(sp)
+  1003fc:	03412503          	lw	a0,52(sp)
+  100400:	03012583          	lw	a1,48(sp)
+  100404:	02c12603          	lw	a2,44(sp)
+  100408:	02812683          	lw	a3,40(sp)
+  10040c:	02412703          	lw	a4,36(sp)
+  100410:	02012783          	lw	a5,32(sp)
+  100414:	01c12803          	lw	a6,28(sp)
+  100418:	01812883          	lw	a7,24(sp)
+  10041c:	01412e03          	lw	t3,20(sp)
+  100420:	01012e83          	lw	t4,16(sp)
+  100424:	00c12f03          	lw	t5,12(sp)
+  100428:	00812f83          	lw	t6,8(sp)
+  10042c:	05010113          	add	sp,sp,80
+  100430:	30200073          	mret
+
+00100434 <default_exc_handler>:
+  100434:	dd9ff06f          	j	10020c <simple_exc_handler>
+
+00100438 <timer_handler>:
+  100438:	f15ff06f          	j	10034c <simple_timer_handler>
+
+0010043c <reset_handler>:
+  10043c:	00000093          	li	ra,0
+  100440:	00008113          	mv	sp,ra
+  100444:	00008193          	mv	gp,ra
+  100448:	00008213          	mv	tp,ra
+  10044c:	00008293          	mv	t0,ra
+  100450:	00008313          	mv	t1,ra
+  100454:	00008393          	mv	t2,ra
+  100458:	00008413          	mv	s0,ra
+  10045c:	00008493          	mv	s1,ra
+  100460:	00008513          	mv	a0,ra
+  100464:	00008593          	mv	a1,ra
+  100468:	00008613          	mv	a2,ra
+  10046c:	00008693          	mv	a3,ra
+  100470:	00008713          	mv	a4,ra
+  100474:	00008793          	mv	a5,ra
+  100478:	00008813          	mv	a6,ra
+  10047c:	00008893          	mv	a7,ra
+  100480:	00008913          	mv	s2,ra
+  100484:	00008993          	mv	s3,ra
+  100488:	00008a13          	mv	s4,ra
+  10048c:	00008a93          	mv	s5,ra
+  100490:	00008b13          	mv	s6,ra
+  100494:	00008b93          	mv	s7,ra
+  100498:	00008c13          	mv	s8,ra
+  10049c:	00008c93          	mv	s9,ra
+  1004a0:	00008d13          	mv	s10,ra
+  1004a4:	00008d93          	mv	s11,ra
+  1004a8:	00008e13          	mv	t3,ra
+  1004ac:	00008e93          	mv	t4,ra
+  1004b0:	00008f13          	mv	t5,ra
+  1004b4:	00008f93          	mv	t6,ra
+  1004b8:	00038117          	auipc	sp,0x38
+  1004bc:	b4810113          	add	sp,sp,-1208 # 138000 <_stack_start>
+
+001004c0 <_start>:
+  1004c0:	00000d17          	auipc	s10,0x0
+  1004c4:	0f0d0d13          	add	s10,s10,240 # 1005b0 <time_increment>
+  1004c8:	00000d97          	auipc	s11,0x0
+  1004cc:	0f8d8d93          	add	s11,s11,248 # 1005c0 <_bss_end>
+  1004d0:	01bd5863          	bge	s10,s11,1004e0 <main_entry>
+
+001004d4 <zero_loop>:
+  1004d4:	000d2023          	sw	zero,0(s10)
+  1004d8:	004d0d13          	add	s10,s10,4
+  1004dc:	ffaddce3          	bge	s11,s10,1004d4 <zero_loop>
+
+001004e0 <main_entry>:
+  1004e0:	00000513          	li	a0,0
+  1004e4:	00000593          	li	a1,0
+  1004e8:	01c000ef          	jal	100504 <main>
+  1004ec:	000202b7          	lui	t0,0x20
+  1004f0:	00828293          	add	t0,t0,8 # 20008 <tohost>
+  1004f4:	00100313          	li	t1,1
+  1004f8:	0062a023          	sw	t1,0(t0)
+
+001004fc <sleep_loop>:
+  1004fc:	10500073          	wfi
+  100500:	ffdff06f          	j	1004fc <sleep_loop>
+
+00100504 <main>:
+  100504:	ff010113          	add	sp,sp,-16
+  100508:	00000517          	auipc	a0,0x0
+  10050c:	08c50513          	add	a0,a0,140 # 100594 <main+0x90>
+  100510:	00112623          	sw	ra,12(sp)
+  100514:	b81ff0ef          	jal	100094 <puts>
+  100518:	deadc537          	lui	a0,0xdeadc
+  10051c:	eef50513          	add	a0,a0,-273 # deadbeef <fromhost+0xde9a3edf>
+  100520:	b95ff0ef          	jal	1000b4 <puthex>
+  100524:	00a00513          	li	a0,10
+  100528:	b5dff0ef          	jal	100084 <putchar>
+  10052c:	baadf537          	lui	a0,0xbaadf
+  100530:	00d50513          	add	a0,a0,13 # baadf00d <fromhost+0xba9a6ffd>
+  100534:	b81ff0ef          	jal	1000b4 <puthex>
+  100538:	00a00513          	li	a0,10
+  10053c:	b49ff0ef          	jal	100084 <putchar>
+  100540:	00c12083          	lw	ra,12(sp)
+  100544:	00000513          	li	a0,0
+  100548:	01010113          	add	sp,sp,16
+  10054c:	00008067          	ret

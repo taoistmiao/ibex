@@ -9,6 +9,6 @@
 PROGRAM_DIR := $(shell dirname $(realpath $(lastword $(MAKEFILE_LIST))))
 # Any extra source files to include in the build. Use the upper case .S
 # extension for assembly files
-EXTRA_SRCS := out_config_00000.S
+EXTRA_SRCS := aapg_test.S aapg_test_template.S
 
 include ${PROGRAM_DIR}/../common/common.mk
