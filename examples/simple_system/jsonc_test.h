@@ -1,0 +1,1 @@
+extern const char * entry_parser(const char * str);
